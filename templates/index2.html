@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- head -->
+  <head>
+    <!-- css & javascript link -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- google font -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- bootstrap & jquery -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.1.js" crossorigin="anonymous"></script>
+    <!-- scroll up & down animation -->
+    <script>
+        $(document).ready(function() {
+            $("#features a").on("click", function(event) {
+                event.preventDefault();
+                $("html, body").animate({
+                    scrollTop: $("#bottom").offset().top
+                }, 1000);
+            });
+            $("#home a").on("click", function(event) {
+                event.preventDefault();
+                $("html, body").animate({
+                    scrollTop: $("#top").offset().top
+                }, 1000);
+            });
+        });
+    </script>
+    <!-- website title -->
+    <title>S.U.R.Y.A</title>
+  </head>
+  <!-- head -->
+
+  <!-- body -->
+  <body>
+    <!-- navbar -->
+    <header id="header" class="header">
+        <nav id="navbar" class="navbar navbar-expand-sm sticky-top">
+            <ul class="navbar-nav">
+                <li id="home" class="nav-item"><a href="#top" class="nav-link" onclick="func()">Home</a></li>
+                <li id="features" class="nav-item"><a href="#bottom" class="nav-link">Features</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- navbar -->
+
+    <!-- section top -->
+    <section id="top" class="top">
+        <div id="name" class="name">
+            <h1 id="title" class="title">S  U  R  Y  A</h1>
+            <h5 id="acronym" class="acronym">Smart Unified Responsive Youthful Assistant</h5><br>
+        </div>
+    </section>
+    <!-- section top -->
+
+    <!-- section bottom -->
+    <section id="bottom" class="bottom">
+        <h1 id="feature-title" class="feature-title">F E  A  T  U  R  E  S</h1>
+        <!-- features button -->
+        <div class="buttons-container" id="btncon">
+            <!-- feature 1 -->
+            <button class="feature-button" id="s-t-t" onclick="myfunction()">
+                <img src="{{ url_for('static', filename='image/speech to text.png') }}" alt="Speech to Text">
+                <span class="ftext">Speech-to-Text</span>
+            </button>
+            <!-- feature 2 -->
+            <button class="feature-button" id="t-t-s" onclick="myfunction3()">
+                <img src="{{ url_for('static', filename='image/text to speech.png') }}" alt="Text to Speech">
+                <span class="ftext">Text-to-Speech</span>
+            </button>
+            <!-- feature 3 -->
+            <button class="feature-button" id="o-t" onclick="myfunction5()">
+                <img src="{{ url_for('static', filename='image/Open task.png') }}" alt="Open Task">
+                <span class="ftext">Open Task</span>
+            </button>
+        </div>
+        <!-- features button -->
+
+        <!-- features content card 1 -->
+        <div id="speechtotext" class="contentcard">
+            <!-- card 1 -->
+            <div class="btntext">
+                <h1 class="title1">Speech-to-Text</h1>
+                <form class="content" id="speech-to-text" action="/speech-to-text" method="post">
+                    <button class="btn1" id="sttbtn" type="submit"><span class="btnfont">Speak</span></button>
+                    <p class="result">Did you say :</p>
+                    <p class="text" id="text"></p>
+                </form>
+                <script>
+                    // function to update text
+                    function updateTextContent(text) {
+                        document.getElementById("text").textContent = text;
+                    }
+                    // submit event listener for the form
+                    document.getElementById("speech-to-text").addEventListener("submit", function (event) {
+                        event.preventDefault(); // prevent default form submission
+                        // fetch API to submit form data
+                        fetch("/speech-to-text", {
+                        method: "POST",
+                        body: new FormData(event.target), // send form data
+                        })
+                        .then((response) => response.text()) // extract text from response
+                        .then((text) => {
+                            updateTextContent(text); // update text content in the HTML
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                        });
+                    });
+                </script>
+                <button id="back1" class="back" onclick="myfunction2()"><span class="btnfont">Back</span></button>
+            </div>
+        </div>
+        <!-- features content card 2 -->
+        <div id="texttospeech" class="contentcard">
+            <!-- card 2 -->
+            <div class="btntext">
+                <h1 class="title1">Text-to-Speech</h1>
+                <form class="content" id="text-to-speech" action="/text-to-speech" method="post">
+                    <textarea name="area" id="area" class="area" cols="30" rows="10" placeholder="Enter text"></textarea>
+                    <button class="btn2" id="ttsbtn" type="submit" onclick="removetext()"><span class="btnfont">Convert</span></button>
+                    <p class="result">You type :</p>
+                    <p class="text" id="text1"></p>
+                </form>
+                <script>
+                    // function to update text
+                    function updateTextContent2(text) {
+                        document.getElementById("text1").textContent = text;
+                    }
+                    // submit event listener for the form
+                    document.getElementById("text-to-speech").addEventListener("submit", function (event) {
+                        event.preventDefault(); // prevent default form submission
+                        // fetch API to submit form data
+                        fetch("/text-to-speech", {
+                            method: "POST",
+                            body: new FormData(event.target), // send form data
+                        })
+                        .then((response) => response.text()) // extract text from response
+                        .then((text) => {
+                            updateTextContent2(text); // update text content in the HTML
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                        });
+                    });
+                </script>
+                <button id="back2" class="back" onclick="myfunction4()"><span class="btnfont">Back</span></button>
+            </div>
+        </div>
+        <!-- features content card 3 -->
+        <div id="opentask" class="contentcard">
+            <!-- card 3 -->
+            <div class="btntext">
+                <h1 class="title1">Open Task</h1>
+                <form class="content" id="open-task" action="/open-task" method="post">
+                    <label for="link" class="label">URL : </label>
+                    <input type="text" name="link" class="inputtext" id="url" placeholder="Enter URL">
+                    <label for="link" class="label">Voice Command : </label>
+                    <input type="text" name="command" class="inputtext" id="command" placeholder="Enter voice command">
+                    <button class="btn2" id="aotbtn" type="submit" formaction="/store-command"><span class="btnfont">Add Command</span></button>
+                    <button class="btn2" id="otbtn" type="button" onclick="speak()"><span class="btnfont">Speak</span></button>
+                    <p class="text" id="text2"></p>
+                </form>
+                <script>
+                    // Function to update text content
+                    function updateTextContent3(text) {
+                        document.getElementById("text2").textContent = text;
+                    }
+
+                    function speak() {
+                        // fetch API to submit form data
+                        fetch("/open-task", {
+                            method: "POST",
+                            body: new FormData(document.getElementById("open-task")), // send form data
+                        })
+                        .then((response) => response.text()) // extract text from response
+                        .then((text) => {
+                            updateTextContent3(text); // update text content in the HTML
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                        });
+                    }
+                </script>
+                <button id="back3" class="back" onclick="myfunction6()"><span class="btnfont">Back</span></button>
+            </div>
+        </div>
+    </section>
+    <!-- section bottom -->
+  </body>
+  <!-- body -->
+</html>
